@@ -2,12 +2,12 @@
 
 This repo has three express applications, each identical apart from the configuration passed into `pino()`.
 
-## Requirements/expectations:
+### Requirements/expectations:
 
 - Node 16x
 - MongoDB 5.x running at localhost:27017
 
-## Install
+### Install
 
 `npm install`
 
@@ -57,8 +57,15 @@ $ npm run appWithPinoPretty
 ```js
 const log = pino({
 	transport: {
-		target: "pino-pretty",
-		options: { destination: 1, colorize: true, ignore: "pid,hostname" },
+		pipeline: [
+			{
+				// logger output for terminal, colorised by level for easy reading
+				target: "./pinocustom.mjs",
+				options: {
+					destination: 1,
+				},
+			},
+		],
 	},
 });
 ```
