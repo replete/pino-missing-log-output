@@ -1,5 +1,4 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const pino = require("pino");
 
 const log = pino();
@@ -15,10 +14,8 @@ app.listen(3000, async () => {
 
 async function connectDatabase() {
 	try {
-		// Trigger 'MongoServerError: Authentication failed' by supplying bad credentials
-		await mongoose.connect(
-			"mongodb://NON_EXISTENT_USER:NON_EXISTENT_PASS@localhost:27017/appdb"
-		);
+		// Imagine this is mongoose.connect(), and its thrown a Authentication Failed error, and no errror is logged. 
+		throw Error('some error')
 		log.info("Connected to Database...");
 	} catch (error) {
 		log.error(error);

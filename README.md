@@ -2,10 +2,29 @@
 
 This repo has three express applications, each identical apart from the configuration passed into `pino()`.
 
-### Requirements/expectations:
+```js
+app.listen(3000, async () => {
+	log.info("API listening...");
+	await connectDatabase();
+});
+
+async function connectDatabase() {
+	try {
+		// Imagine this is mongoose.connect(), and its thrown a Authentication Failed error, and no errror is logged. 
+		throw Error('some error')
+		log.info("Connected to Database...");
+	} catch (error) {
+		log.error(error);
+		process.exit(1);
+	}
+}
+```
+
+
+### Requirements:
 
 - Node 16x
-- MongoDB 5.x running at localhost:27017
+- `npm install`
 
 ### Install
 
@@ -25,9 +44,9 @@ $ npm run appWithPino
 > pino-problem@1.0.0 appWithPino
 > node appWithPino.js
 
-{"level":30,"time":1635619240867,"pid":78143,"hostname":"Seneca","msg":"App start"}
-{"level":30,"time":1635619240873,"pid":78143,"hostname":"Seneca","msg":"API listening..."}
-{"level":50,"time":1635619240934,"pid":78143,"hostname":"Seneca","err":{"type":"MongoServerError","message":"Authentication failed.","stack":"MongoServerError: Authentication failed.\n    at MessageStream.messageHandler (/Users/phil/dev/pino-problem/node_modules/mongodb/lib/cmap/connection.js:467:30)\n    at MessageStream.emit (node:events:390:28)\n    at processIncomingData (/Users/phil/dev/pino-problem/node_modules/mongodb/lib/cmap/message_stream.js:108:16)\n    at MessageStream._write (/Users/phil/dev/pino-problem/node_modules/mongodb/lib/cmap/message_stream.js:28:9)\n    at writeOrBuffer (node:internal/streams/writable:389:12)\n    at _write (node:internal/streams/writable:330:10)\n    at MessageStream.Writable.write (node:internal/streams/writable:334:10)\n    at Socket.ondata (node:internal/streams/readable:754:22)\n    at Socket.emit (node:events:390:28)\n    at addChunk (node:internal/streams/readable:315:12)","ok":0,"code":18,"codeName":"AuthenticationFailed"},"msg":"Authentication failed."}
+{"level":30,"time":1635621351990,"pid":83045,"hostname":"Seneca","msg":"App start"}
+{"level":30,"time":1635621351996,"pid":83045,"hostname":"Seneca","msg":"API listening..."}
+{"level":50,"time":1635621351996,"pid":83045,"hostname":"Seneca","err":{"type":"Error","message":"some error","stack":"Error: some error\n    at connectDatabase (/Users/phil/dev/pino-problem/appWithPino.js:17:9)\n    at Server.<anonymous> (/Users/phil/dev/pino-problem/appWithPino.js:12:8)\n    at Object.onceWrapper (node:events:509:28)\n    at Server.emit (node:events:390:28)\n    at emitListeningNT (node:net:1368:10)\n    at processTicksAndRejections (node:internal/process/task_queues:82:21)"},"msg":"some error"}
 ```
 
 ## Pino configured with pretty-print:
@@ -44,12 +63,10 @@ const log = pino({
 Running `npm run appWithPinoPretty` results in missing logs:
 
 ```bash
-$ npm run appWithPinoPretty
+$ npm run appWithPinoCustom
 
-> pino-problem@1.0.0 appWithPinoPretty
-> node appWithPinoPretty.js
-
-[1635619248203] INFO: App start
+> pino-problem@1.0.0 appWithPinoCustom
+> node appWithPinoCustom.js
 ```
 
 ## Pino configured with custom transport:

@@ -13,7 +13,6 @@
 	"license": "ISC",
 	"devDependencies": {
 		"express": "^4.17.1",
-		"mongoose": "^6.0.12",
 		"pino": "^7.0.5",
 		"pino-pretty": "^7.1.0"
 	}
